@@ -20,33 +20,33 @@
 	<!-- ################################################################ UPPER BAR -->
 	<header>
 		<span style="margin-left:10px; margin-right:80px; font-size:35px; font-weight:bold;">SECOsandpile</span>
-		Zoom (%) :
+		Zoom (%):
 		<input type="number" id="zoomLevel" style="margin-right:20px" oninput="set_zoom(this)" value="100" max="9999"
 			step="10" />
-		Delay (ms) :
+		Tempo entre passos (ms):
 		<input type="number" id="delay" style="margin-right:20px" value="100" oninput="changeDelay(this);" min="0"
 			max="10000" />
-		Refresh rate :
+		Taxa de atualização:
 		<input type="number" id="IPF" style="margin-right:80px" value="1" oninput="changeIPS(this);" min="1"
 			max="999" />
 		<button id="playButton" onclick="playPause(this)" class="btn btn-default"
-			style="margin-right:20px; font-weight:bold;">Play</button>
-		<button onclick="step()" style="margin-right:20px" class="btn btn-default">Step</button>
+			style="margin-right:20px; font-weight:bold;">Iniciar</button>
+		<button onclick="step()" style="margin-right:20px" class="btn btn-default">Passo</button>
 		<span id="number_of_steps"></span>
-		<button onclick="reset_number_of_steps()" style="margin-right:20px" class="btn btn-default">Reset
-			counter</button>
+		<button onclick="reset_number_of_steps()" style="margin-right:20px" class="btn btn-default">Reiniciar
+			contador</button>
 
 		<!-- <button id="stabilizeButton"  onclick="stabTiling()" class="btn btn-primary">Stabilize</button> -->
 
 		<!-- Upper right alignment -->
-		<span style="position:absolute; top:10px; right:50px"> Auto-pause : </span>
+		<span style="position:absolute; top:10px; right:50px"> Pausa automática: </span>
 		<label class="switch" style="position:absolute; top:12px; right:10px">
 			<input type="checkbox" id="pauseToggle" checked="true">
 			<span class="slider round"></span>
 		</label>
 
 		<!-- Upper right alignment -->
-		<span style="position:absolute; top:30px; right:50px"> Draw-tiles : </span>
+		<span style="position:absolute; top:30px; right:50px"> Exibir linhas: </span>
 		<label class="switch" style="position:absolute; top:32px; right:10px">
 			<input type="checkbox" id="wireFrameToggle" oninput="enableWireFrame(this);" checked="false">
 			<span class="slider round"></span>
@@ -59,7 +59,7 @@
 
 		<!-- ############################################################ Main Controls -->
 		<div id="main controls" class="controlGroup">
-			<p class="groupTitle">Tiling selection</p>
+			<p class="groupTitle">Seleção de matriz</p>
 			<select id="TilingSelect" onchange="hideParams()">
 				<optgroup label="Regular">
 					<option value="sqTiling">Square Tiling</option>
@@ -115,22 +115,21 @@
 			<!--<form id="postCustom" enctype="multipart/form-data" action="/upload/image" method="post">
 					<input type="file" id="inputCustom" accept=".png,.jpg,.jpeg,.bmp" style="display:none;" />
 				</form>-->
-			<button onclick='drawTiling()' style="margin-left:25px; font-weight:bold;" class="btn btn-default">Make
-				Tiling</button>
+			<button onclick='drawTiling()' style="margin-left:25px; font-weight:bold;" class="btn btn-default">Criar Matriz</button>
 			<br>
 
 
 			<!-- Tiling-specific controls -->
-			<p class="groupTitle" id="paramTitle">Parameters</p>
+			<p class="groupTitle" id="paramTitle">Parâmetros</p>
 			<!-- Square controls -->
 			<div id="paramHide">
 				<span id="p_width">
-					Width :
+					Largura:
 					<input type="number" id="cW" min="0" value="100" style="width: 50px;" />
 				</span>
 
 				<span id="p_height">
-					&nbsp; &nbsp; Height :
+					&nbsp; &nbsp; Altura:
 					<input type="number" id="cH" min="0" value="100" style="width: 50px;" />
 					<br></span>
 
@@ -150,20 +149,20 @@
 
 		<!-- ############################################################ Mouse Controls -->
 		<div id="mouse controls" class="controlGroup">
-			<p class="groupTitle">Mouse controls</p>
+			<p class="groupTitle">Controles do mouse</p>
 			<select id="mouseOperation">
-				<option value="addOne">Add</option>
-				<option value="rmOne">Remove</option>
-				<option value="setOne">Set</option>
-				<option value="select">Select</option>
+				<option value="addOne">Adicionar</option>
+				<option value="rmOne">Remover</option>
+				<option value="setOne">Definir</option>
+				<option value="select">Selecionar</option>
 			</select>
 			<div id="maskMouseRepeat" style="display:inline;">
-				&nbsp;&nbsp;times&nbsp;&nbsp;
+				&nbsp;&nbsp;vezes&nbsp;&nbsp;
 				<input type="number" id="mouseOperationRepeat" value="1" min="0" max="999999" style="width: 70px;" />
 			</div>
 			<br><br>
 			<div style="display:flex;">
-				Mouse radius :
+				Raio do mouse :
 				<input type="range" min="1" max="8" value="1" step="1" id="brushRange"
 					style="width:150px;margin-left:10px;" list="steplist">
 				<datalist id="steplist">
@@ -181,57 +180,56 @@
 
 		<!-- ############################################################ Operations / Secondary Controls -->
 		<div id="secondary controls" class="controlGroup">
-			<p class="groupTitle">Sandpile operations</p>
+			<p class="groupTitle">Operações da pilha de areia</p>
 			<select id="complexOperationValue">
-				<option value="MaxS">Max stable</option>
-				<option value="OneE">One Everywhere</option>
-				<option value="Dual">Dual</option>
-				<option value="Iden">Identity</option>
-				<option value="Inve">Inverse</option>
-				<option value="Rand">Random</option>
+				<option value="MaxS">Estável máx.</option>
+				<option value="OneE">Um em todo lugar</option>
+				<option value="Dual">Duplo</option>
+				<option value="Iden">Identidade</option>
+				<option value="Inve">Inversa</option>
+				<option value="Rand">Aleatória</option>
 			</select>
 			<div id="complexTimesMask" style="display:inline;">
-				&nbsp;&nbsp;times&nbsp;&nbsp;
+				&nbsp;&nbsp;vezes&nbsp;&nbsp;
 				<input type="number" id="complexOperationRepeat" min="0" value="1" max="999999" style="width: 70px;" />
 			</div>
 			<br>
 			<div style="margin-left:auto; margin-right:auto; display:table; margin-top:10px;" class="btn-group">
-				<button id="complexOperationAdd" onclick="complexOperationAdd()" class="btn btn-default">Add</button>
+				<button id="complexOperationAdd" onclick="complexOperationAdd()" class="btn btn-default">Adicionar</button>
 
 				<button id="complexOperationSub" onclick="complexOperationSub()"
-					class="btn btn-default">Substract</button>
+					class="btn btn-default">Subtrair</button>
 
-				<button id="complexOperationSet" onclick="complexOperationSet()" class="btn btn-default">Set</button>
+				<button id="complexOperationSet" onclick="complexOperationSet()" class="btn btn-default">Definir</button>
 			</div>
 			<button onclick="clearTiling()" class="btn btn-default"
-				style="margin-top:10px;display: table;width: -webkit-fill-available;">Clear</button>
+				style="margin-top:10px;display: table;width: -webkit-fill-available;">Limpar</button>
 			<button id="saveConfig" onclick="saveConfiguration()"
-				style="margin-top:10px;display: table;width: -webkit-fill-available;;" class="btn btn-default">Save
-				Configuration</button>
+				style="margin-top:10px;display: table;width: -webkit-fill-available;;" class="btn btn-default">Salvar Configurações</button>
 
 			<!-- Random Seeding -->
 			<div id="seedMask" style="margin-top:10px;">
-				Random seed :
+				Semente aleatória:
 				<input id="randSeed" value="1" oninput="changeSeed(this);" style="width: 60px;" />
 			</div>
 		</div> <!-- Operations controls -->
 
 		<!-- ############################################################ Stabilization -->
 		<div class="controlGroup">
-			<p class="groupTitle">Sandpile process</p>
-			<button onclick="steps()" class="btn btn-default">Step</button>
-			&nbsp;&nbsp;times&nbsp;&nbsp;
+			<p class="groupTitle">Processos da pilha de areia</p>
+			<button onclick="steps()" class="btn btn-default">Passo</button>
+			&nbsp;&nbsp;vezes&nbsp;&nbsp;
 			<input type="number" id="stepsRepeat" value="1" min="1" max="999999" style="width: 70px;" />
 			<br>
 			<div style="margin-left:auto; margin-right:auto; margin-top:10px; display:grid">
-				<button onclick="stabTiling()" class="btn btn-default">Stabilize</button>
+				<button onclick="stabTiling()" class="btn btn-default">Estabilizar</button>
 			</div>
 		</div>
 
 		<!-- ############################################################ Import/Export -->
 		<!-- <div class="controlGroup"> -->
-			<!-- File importing -->
-			<!-- <p class="groupTitle">Import/Export</p>
+		<!-- File importing -->
+		<!-- <p class="groupTitle">Import/Export</p>
 			<div style="margin-left:auto; margin-right:auto; display:grid">
 				<label for="files" class="btn btn-default">
 					Import from JSON
@@ -244,8 +242,8 @@
 				</label>
 			</div> -->
 
-			<!-- File button not displayed, and a JS command clicks on them. -->
-			<!-- <input type="file" id="files" name="files[]" accept=".JSON" multiple style="display:none;" />
+		<!-- File button not displayed, and a JS command clicks on them. -->
+		<!-- <input type="file" id="files" name="files[]" accept=".JSON" multiple style="display:none;" />
 			<input type="file" id="filesPIC" name="files2[]" accept=".png,.jpg,.jpeg,.bmp" multiple
 				style="display:none;" />
 			<output id="list" style="display:none;"></output>
@@ -255,9 +253,9 @@
 
 		<!-- ############################################################ Misc Controls -->
 		<div class="controlGroup">
-			<p class="groupTitle">Misc controls</p>
+			<p class="groupTitle">Controles diversos</p>
 			<button id="colorButton" style="margin-left:auto;margin-right:auto;display:block;"
-				class="btn btn-default">Change colors</button>
+				class="btn btn-default">Alterar cores</button>
 		</div>
 
 		<!-- ############################################################ Informations -->
@@ -279,35 +277,35 @@
 		<!-- ############################################################ Roundness -->
 		<!-- <div class="controlGroup" style="height:360px;">
 			<p class="groupTitle">Roundness</p> -->
-			<!-- Animate -->
-			<!-- Animate :
+		<!-- Animate -->
+		<!-- Animate :
 			<label class="switch" style="margin-top:5px">
 				<input type="checkbox" id="roundAnimate" checked="true">
 				<span class="slider round"></span>
 			</label> -->
-			<!-- Roundness buttons-->
-			<!-- <div style="margin-left:auto; margin-right:auto; display:grid"> -->
-				<!-- Roundness file -->
-				<!-- <button id="createRoundness" style="margin-top:5px;" class="btn btn-default">Compute roundness
+		<!-- Roundness buttons-->
+		<!-- <div style="margin-left:auto; margin-right:auto; display:grid"> -->
+		<!-- Roundness file -->
+		<!-- <button id="createRoundness" style="margin-top:5px;" class="btn btn-default">Compute roundness
 					file</button> -->
-				<!-- Roundness fast -->
-				<!-- <button id="createRoundnessFast" style="margin-top:5px;" class="btn btn-default">Fast (circle shrink
+		<!-- Roundness fast -->
+		<!-- <button id="createRoundnessFast" style="margin-top:5px;" class="btn btn-default">Fast (circle shrink
 					only)</button> -->
-				<!-- Export frontier to tikz -->
-				<!-- <button id="export_frontierTikz" onclick="export_frontierTikz()" style="margin-top:5px;"
+		<!-- Export frontier to tikz -->
+		<!-- <button id="export_frontierTikz" onclick="export_frontierTikz()" style="margin-top:5px;"
 					class="btn btn-default">Export frontier to TIKZ</button>
 			</div> -->
-			<!-- Show radii and current roundness -->
-			<!-- <div style="margin-top:10px;"> -->
-				<!-- Radii -->
-				<!-- Show Xscribed radii :
+		<!-- Show radii and current roundness -->
+		<!-- <div style="margin-top:10px;"> -->
+		<!-- Radii -->
+		<!-- Show Xscribed radii :
 				<label class="switch" style="">
 					<input type="checkbox" id="radiiShow" oninput="radii(this);">
 					<span class="slider round"></span>
 				</label>
 				<br> -->
-				<!-- Roundness now -->
-				<!-- Show current roundness :
+		<!-- Roundness now -->
+		<!-- Show current roundness :
 				<label class="switch" style="">
 					<input type="checkbox" id="roundShow" oninput="roundness(this);">
 					<span class="slider round"></span>
@@ -321,8 +319,8 @@
 		<!-- ############################################################ Harmonics -->
 		<!-- <div class="controlGroup">
 			<p class="groupTitle">Harmonics</p> -->
-			<!-- Harmonics -->
-			<!-- <select id="harmonicValue" style="width:100px">
+		<!-- Harmonics -->
+		<!-- <select id="harmonicValue" style="width:100px">
 				<option value="1A">1A</option>
 				<option value="1B">1B</option>
 				<option value="2A">2A</option>

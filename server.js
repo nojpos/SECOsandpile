@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 
 // Serve os arquivos estáticos da pasta dist (gerada pelo ng build)
-app.use(express.static(__dirname + '/dist/secosandpile'));
+app.use(express.static('./dist/secosandpile'));
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname + '/dist/secosandpile/index.html'));

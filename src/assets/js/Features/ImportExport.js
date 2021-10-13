@@ -238,16 +238,16 @@ handleDownloadTIKZ = function(evt){
     link.click();
 }
 
-var createjson = document.getElementById('createjson')
-createjson.addEventListener('click', handleDownloadJSON, false);
+// var createjson = document.getElementById('createjson')
+// createjson.addEventListener('click', handleDownloadJSON, false);
 
-var createsvg = document.getElementById('createsvg');
-createsvg.addEventListener('click', handleDownloadSVG, false);
+// var createsvg = document.getElementById('createsvg');
+// createsvg.addEventListener('click', handleDownloadSVG, false);
 
-var createtikz = document.getElementById('createtikz');
-createtikz.addEventListener('click', handleDownloadTIKZ, false);
+// var createtikz = document.getElementById('createtikz');
+// createtikz.addEventListener('click', handleDownloadTIKZ, false);
 
 var textFile = null;
 
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
+// document.getElementById('files').addEventListener('change', handleFileSelect, false);
 

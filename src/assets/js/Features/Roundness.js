@@ -35,8 +35,8 @@ handleDownloadRoundness = async function(evt){
 }
 
 // event listener: click on createRoundness calls handleDownloadRoundness
-var createRoundness = document.getElementById('createRoundness');
-createRoundness.addEventListener('click', handleDownloadRoundness, false);
+// var createRoundness = document.getElementById('createRoundness');
+// createRoundness.addEventListener('click', handleDownloadRoundness, false);
 
 //
 // [ 0.1 ] Same as [ 0.0 ], for Faster roundness
@@ -60,8 +60,8 @@ handleDownloadRoundnessFast = async function(evt){
 }
 
 // event listener fast: click on createRoundnessFast calls handleDownloadRoundnessFast
-var createRoundnessFast = document.getElementById('createRoundnessFast');
-createRoundnessFast.addEventListener('click', handleDownloadRoundnessFast, false);
+// var createRoundnessFast = document.getElementById('createRoundnessFast');
+// createRoundnessFast.addEventListener('click', handleDownloadRoundnessFast, false);
 
 //
 // [ 0.1 ] Global variables to be initialized by makeRoundnessFile

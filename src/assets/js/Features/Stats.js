@@ -127,6 +127,6 @@ function download(filename, text) {
 }
 
 
-var createStats = document.getElementById('createStats')
-createStats.addEventListener('click', handleDownloadStats, false);
+// var createStats = document.getElementById('createStats')
+// createStats.addEventListener('click', handleDownloadStats, false);
 

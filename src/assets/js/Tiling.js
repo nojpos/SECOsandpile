@@ -230,6 +230,9 @@ class Tiling{
 	// ------------------------------------------------
 	// 	[ 2.2 ] 	Apply sandpile steps
 	// ------------------------------------------------
+
+	qtdAvalanches = 0
+	qtdGraosPerdidos = 0
 	iterate(){
 		// Topple any tile that has more than the limit of sand
 		var is_stable = true;
@@ -240,10 +243,12 @@ class Tiling{
 			var til = this.tiles[i];
 			if(til.prevSand >= til.limit){
 				til.sand -= til.limit;
+				this.qtdAvalanches += 1;
 				for(var j = 0; j< til.neighbors.length; j++){
 					this.tiles[til.neighbors[j]].sand += 1;
 				}
 				is_stable = false;
+				this.qtdGraosPerdidos += 4 - til.neighbors.length;
 			}
 		}
 		return is_stable;

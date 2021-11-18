@@ -9,19 +9,19 @@
 //		the interesting part of the app.
 //
 // ################################################
-class App{
+class App {
 
-	constructor(){
+	constructor() {
 
 		// Display
 		var container = document.getElementById("canvasHolder");
 		this.WIDTH = container.clientWidth - 10;
 		this.HEIGHT = container.clientHeight - 10;
-		
+
 		this.scene = new THREE.Scene();
 		this.ratio = this.WIDTH / this.HEIGHT;
-		
-		this.renderer = new THREE.WebGLRenderer( );
+
+		this.renderer = new THREE.WebGLRenderer();
 		this.renderer.setSize(this.WIDTH, this.HEIGHT);
 		container.appendChild(this.renderer.domElement);
 
@@ -31,21 +31,21 @@ class App{
 		var top_cam = this.HEIGHT / 4.5;
 		var bottom = -this.HEIGHT / 4.5;
 
-		this.camera = new THREE.OrthographicCamera( left, right, top_cam, bottom, 0, 10 );
+		this.camera = new THREE.OrthographicCamera(left, right, top_cam, bottom, 0, 10);
 		this.camera.position.z = 5;
 
-		this.controls = new THREE.OrthographicTrackballControls( this.camera, this.renderer.domElement ); //OK
+		this.controls = new THREE.OrthographicTrackballControls(this.camera, this.renderer.domElement); //OK
 
 		this.controls.enablePan = true;
 		this.controls.enableZoom = true;
 		this.controls.enableRotate = false;
 	}
-	
+
 	// ------------------------------------------------
 	// 	[ 1.1 ] 	Re-sizing of the Canvas
 	// ------------------------------------------------
-	
-	reset_size(){
+
+	reset_size() {
 		var container = document.getElementById("canvasHolder");
 		this.WIDTH = container.clientWidth - 10;
 		this.HEIGHT = container.clientHeight - 10;
@@ -60,7 +60,7 @@ class App{
 		this.camera.right = right;
 		this.camera.top = top_cam;
 		this.camera.bottom = bottom;
-		
+
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize(this.WIDTH, this.HEIGHT);
 	}
@@ -102,7 +102,7 @@ var color_hue_shift = 0.0; // Animation of selected tile color
 
 var color_select = new THREE.Color(); // Animation of selected tile color
 
-var tileInfo = document.getElementById("tileInfo"); 
+var tileInfo = document.getElementById("tileInfo");
 
 var check_copy = true; // Copy the tiling once in a while to see if it is stable
 
@@ -114,9 +114,9 @@ setInterval(refresh_zoom, 200); // 		[ 5.2 ]
 
 // ---------------------- Events
 
-window.addEventListener( 'resize', onWindowResize, false );
+window.addEventListener('resize', onWindowResize, false);
 
-function onWindowResize(){
+function onWindowResize() {
 	app.reset_size();
 }
 
@@ -133,42 +133,44 @@ function onWindowResize(){
 //         incremented in [ 3.1 ] and [ 3.2 ]
 // ------------------------------------------------
 
-function reset_number_of_steps(){
-        number_of_steps = 0;
-        document.getElementById("number_of_steps").innerHTML = number_of_steps;
+function reset_number_of_steps() {
+	number_of_steps = 0;
+	document.getElementById("number_of_steps").innerHTML = number_of_steps;
 }
 
-function increment_number_of_steps(){
-        number_of_steps++;
-        document.getElementById("number_of_steps").innerHTML = number_of_steps;
+function increment_number_of_steps() {
+	show_stats();
+	number_of_steps++;
+	document.getElementById("number_of_steps").innerHTML = number_of_steps;
 }
 
 // ------------------------------------------------
 // 	[ 3.1 ] 	Apply one sandpile step
 //		Tiling.js [ 2.2 ] [ 2.6 ]
 // ------------------------------------------------
-function step(){
-	if(currentTiling){
+function step() {
+	if (currentTiling) {
 		currentTiling.iterate();
-                increment_number_of_steps();
+		increment_number_of_steps();
 		currentTiling.colorTiles();
-		if(selectedTile)
+		if (selectedTile)
 			tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
 	}
 }
 
-function steps(){
-        // get number of steps
+function steps() {
+	// get number of steps
 	let n = document.getElementById("stepsRepeat").valueAsNumber;
-	if(currentTiling){
-                let is_stable = false;
-                // perform n steps
-                for(let i=0; i<n && !is_stable; i++){
-		        currentTiling.iterate();
-                        increment_number_of_steps();
-                }
+	if (currentTiling) {
+		let is_stable = false;
+		// perform n steps
+		// debugger;
+		for (let i = 0; i < n && !is_stable; i++) {
+			currentTiling.iterate();
+			increment_number_of_steps();
+		}
 		currentTiling.colorTiles();
-		if(selectedTile)
+		if (selectedTile)
 			tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
 	}
 }
@@ -177,19 +179,19 @@ function steps(){
 // 	[ 3.2 ] 	Apply multiple steps and color
 //		Tiling.js [ 2.2 ] [ 2.6 ]
 // ------------------------------------------------
-function iterateTiling(){
+function iterateTiling() {
 	var is_stable = false;
-	for(var i = 0; i<it_per_frame; i++){
+	for (var i = 0; i < it_per_frame; i++) {
 		is_stable = currentTiling.iterate();
-                if(!is_stable){
-                        increment_number_of_steps()
-                }
+		if (!is_stable) {
+			increment_number_of_steps()
+		}
 	}
-	
-	if(document.getElementById("pauseToggle").checked && is_stable)
+
+	if (document.getElementById("pauseToggle").checked && is_stable)
 		playPause(document.getElementById("playButton"));
 	currentTiling.colorTiles();
-	if(selectedTile)
+	if (selectedTile)
 		tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
 
 }
@@ -199,12 +201,12 @@ function iterateTiling(){
 // 	[ 3.3 ] 	Stabilize the current Tiling
 //		Tiling.js [ 2.5 ]
 // ------------------------------------------------
-function stabTiling(){
-	if(currentTiling) {
+function stabTiling() {
+	if (currentTiling) {
 		currentTiling.stabilize();
 	}
 
-	if(selectedTile)
+	if (selectedTile)
 		tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
 }
 
@@ -213,8 +215,8 @@ function stabTiling(){
 // 	[ 3.4 ] 	Empty the Tiling
 //		Tiling.js [ 2.4 ]
 // ------------------------------------------------
-function clearTiling(){
-	if(currentTiling){
+function clearTiling() {
+	if (currentTiling) {
 		currentTiling.clear();
 	}
 }
@@ -229,146 +231,146 @@ function clearTiling(){
 //		Tiling.js [ 2.3 ] [ 2.4 ] [ 2.5 ]
 //
 // ------------------------------------------------
-function complexOperationAdd(){
+function complexOperationAdd() {
 	// Apply the selected operation, additively
 
-	if(currentTiling){
-		
+	if (currentTiling) {
+
 		currentTiling.lastChange = 0;
 		var operationType = document.getElementById("complexOperationValue").value;
 		var operationTimes = document.getElementById("complexOperationRepeat").valueAsNumber;
-		switch(operationType) {
+		switch (operationType) {
 			case "OneE":
 				currentTiling.addEverywhere(operationTimes);
-			break;
+				break;
 
 			case "MaxS":
-				for(var i = 0; i<operationTimes;i++)
+				for (var i = 0; i < operationTimes; i++)
 					currentTiling.addMaxStable();
-			break;
+				break;
 
 			case "Rand":
 				currentTiling.addRandom(operationTimes);
-			break;
+				break;
 
 			case "Dual":
 				currentTiling.addConfiguration(currentTiling.getHiddenDual());
-			break;
+				break;
 
 			case "Iden":
-				for(var i = 0; i< operationTimes; i++)
+				for (var i = 0; i < operationTimes; i++)
 					currentTiling.addConfiguration(currentTiling.get_identity());
-			break;
+				break;
 			case "Inve":
 				currentTiling.addConfiguration(currentTiling.get_inverse());
-			break;
+				break;
 		}
-		if(operationType.substring(0, 4) == "CNFG"){
-			for(var i = 0; i<operationTimes; i++)
+		if (operationType.substring(0, 4) == "CNFG") {
+			for (var i = 0; i < operationTimes; i++)
 				currentTiling.addConfiguration(savedConfigs[operationType.substring(4, operationType.length)]);
 		}
 	}
 
-	if(selectedTile)
+	if (selectedTile)
 		tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
 }
 
-function complexOperationSet(){
+function complexOperationSet() {
 	// Apply the selected operation, and set the Tiling accordingly
 
-	if(currentTiling){
+	if (currentTiling) {
 		currentTiling.lastChange = 0;
 		var operationType = document.getElementById("complexOperationValue").value;
 		var operationTimes = document.getElementById("complexOperationRepeat").valueAsNumber;
-		switch(operationType) {
+		switch (operationType) {
 			case "OneE":
 				currentTiling.clear();
 				currentTiling.addEverywhere(operationTimes);
-			break;
+				break;
 
 			case "MaxS":
 				currentTiling.clear();
-				for(var i = 0; i< operationTimes; i++)
+				for (var i = 0; i < operationTimes; i++)
 					currentTiling.addMaxStable();
-			break;
+				break;
 
 			case "Rand":
 				currentTiling.clear();
 				currentTiling.addRandom(operationTimes);
-			break;
+				break;
 
 			case "Dual":
 				let newTilingDual = currentTiling.getHiddenDual();
 				currentTiling.clear();
 				currentTiling.addConfiguration(newTilingDual);
-			break;
+				break;
 
 			case "Iden":
 				currentTiling.clear();
-				for(var i = 0; i< operationTimes; i++)
+				for (var i = 0; i < operationTimes; i++)
 					currentTiling.addConfiguration(currentTiling.get_identity());
-			break;
+				break;
 
 			case "Inve":
-                                let newTilingInve = currentTiling.get_inverse();
+				let newTilingInve = currentTiling.get_inverse();
 				currentTiling.clear();
 				currentTiling.addConfiguration(newTilingInve);
-			break;
+				break;
 		}
-		if(operationType.substring(0, 4) == "CNFG"){
+		if (operationType.substring(0, 4) == "CNFG") {
 			currentTiling.clear();
-			for(var i = 0; i<operationTimes; i++)
+			for (var i = 0; i < operationTimes; i++)
 				currentTiling.addConfiguration(savedConfigs[operationType.substring(4, operationType.length)]);
 		}
 	}
 
-	if(selectedTile)
+	if (selectedTile)
 		tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
 }
 
-function complexOperationSub(){
+function complexOperationSub() {
 	// Apply the selected operation, subtractively
 
-	if(currentTiling){
+	if (currentTiling) {
 		currentTiling.lastChange = 0;
 		var operationType = document.getElementById("complexOperationValue").value;
 		var operationTimes = document.getElementById("complexOperationRepeat").valueAsNumber;
-		switch(operationType) {
+		switch (operationType) {
 			case "OneE":
 				currentTiling.removeEverywhere(operationTimes);
-			break;
+				break;
 
 			case "MaxS":
-				for(var i = 0; i< currentTiling.tiles.length; i++){
-					currentTiling.remove(i, (currentTiling.tiles[i].limit - 1)* operationTimes);
+				for (var i = 0; i < currentTiling.tiles.length; i++) {
+					currentTiling.remove(i, (currentTiling.tiles[i].limit - 1) * operationTimes);
 				}
 				currentTiling.colorTiles();
-			break;
+				break;
 
 			case "Rand":
 				currentTiling.removeRandom(operationTimes);
-			break;
+				break;
 
 			case "Dual":
 				currentTiling.removeConfiguration(currentTiling.getHiddenDual());
-			break;
+				break;
 
 			case "Iden":
-				for(var i = 0; i< operationTimes; i++)
+				for (var i = 0; i < operationTimes; i++)
 					currentTiling.removeConfiguration(currentTiling.get_identity());
-			break;
+				break;
 
 			case "Inve":
 				currentTiling.removeConfiguration(currentTiling.get_inverse());
-			break;
+				break;
 		}
-		if(operationType.substring(0, 4) == "CNFG"){
-			for(var i = 0; i<operationTimes; i++)
+		if (operationType.substring(0, 4) == "CNFG") {
+			for (var i = 0; i < operationTimes; i++)
 				currentTiling.removeConfiguration(savedConfigs[operationType.substring(4, operationType.length)]);
 		}
 	}
 
-	if(selectedTile)
+	if (selectedTile)
 		tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
 }
 
@@ -384,24 +386,24 @@ function complexOperationSub(){
 // 	[ 4.1 ] 	Main play function
 // ------------------------------------------------
 async function playWithDelay() {
-	if(currentTiling){
-	       while(true){
-		       if(play){
-		               iterateTiling ();
-		       }
-		       await sleep(delay);
-	       }
+	if (currentTiling) {
+		while (true) {
+			if (play) {
+				iterateTiling();
+			}
+			await sleep(delay);
+		}
 	}
 }
 
 // ------------------------------------------------
 // 	[ 4.2 ] 	Either play, or pause
 // ------------------------------------------------
-function playPause(elem){
-	if(play){
+function playPause(elem) {
+	if (play) {
 		play = false;
 		elem.innerHTML = "Play";
-		elem.style.backgroundColor= "#FFFFFF";
+		elem.style.backgroundColor = "#FFFFFF";
 	} else {
 		play = true;
 		elem.innerHTML = "Pause";
@@ -414,13 +416,13 @@ function playPause(elem){
 //			
 //			Called by a routine.
 // ------------------------------------------------
-function colorSelected(){
-	if(currentTiling){
-		if(!play){
+function colorSelected() {
+	if (currentTiling) {
+		if (!play) {
 			color_hue_shift += 0.05;
 			color_hue_shift = color_hue_shift % 1.0;
-			if(currentTiling.selectedIndex >= 0 ){
-				color_select.setHSL( color_hue_shift, 1.0, 0.5 );
+			if (currentTiling.selectedIndex >= 0) {
+				color_select.setHSL(color_hue_shift, 1.0, 0.5);
 				currentTiling.colorTile(currentTiling.selectedIndex, color_select);
 			}
 		}
@@ -430,20 +432,20 @@ function colorSelected(){
 // ------------------------------------------------
 // 	[ 4.4 ] 	Display border of tiles.
 // ------------------------------------------------
-function enableWireFrame(elem){
-	if(currentTiling){
-		if(currentTiling.wireFrame){
-			if(elem.checked){
+function enableWireFrame(elem) {
+	if (currentTiling) {
+		if (currentTiling.wireFrame) {
+			if (elem.checked) {
 				app.scene.add(currentTiling.wireFrame);
 				wireFrameEnabled = true;
 			}
-			else{
+			else {
 				app.scene.remove(currentTiling.wireFrame);
 				wireFrameEnabled = false;
 			}
 		}
 	}
-		
+
 }
 
 // ------------------------------------------------
@@ -452,90 +454,90 @@ function enableWireFrame(elem){
 //
 //		App.js [ 1.0 ]
 // ------------------------------------------------
-function drawTiling(){
+function drawTiling() {
 
-	while(app.scene.children.length > 0){
+	while (app.scene.children.length > 0) {
 		app.scene.remove(app.scene.children[0]);
 		console.log("cleared");
 	}
-	
+
 	check_stable = 0;
-	
+
 	cW = document.getElementById("cW").value;
 	cH = document.getElementById("cH").value;
-	
+
 	var size = document.getElementById("size").value;
 
 	selectedTile = null;
-	
+
 	preset = document.getElementById("TilingSelect").value;
 
 	var nbIt = document.getElementById("penroseIt").value;
-	
+
 	var command = "currentTiling = Tiling." + preset + "({height:cH, width:cW, iterations:nbIt, size:size})";
-	
-        console.log("BEGIN construct a new Tiling");
+
+	console.log("BEGIN construct a new Tiling");
 	eval(command);
-        console.log("END construct a new Tiling");
-        console.log("INFO the current Tiling has "+currentTiling.tiles.length+" tiles");
-	
+	console.log("END construct a new Tiling");
+	console.log("INFO the current Tiling has " + currentTiling.tiles.length + " tiles");
+
 	currentTiling.cmap = cmap;
-	
+
 	app.controls.zoomCamera();
 	app.controls.object.updateProjectionMatrix();
 
 	app.scene.add(currentTiling.mesh);
-	
+
 	currentTiling.colorTiles();
 	//console.log(currentTiling);
-	
+
 	enableWireFrame(document.getElementById("wireFrameToggle"));
 
 	playWithDelay();
 
 	var render = function () {
-		requestAnimationFrame( render );
+		requestAnimationFrame(render);
 		app.controls.update();
-		app.renderer.render( app.scene, app.camera );
+		app.renderer.render(app.scene, app.camera);
 	};
 	render();
 }
 
-function redraw(){
-	while(app.scene.children.length > 0){
+function redraw() {
+	while (app.scene.children.length > 0) {
 		app.scene.remove(app.scene.children[0]);
 		console.log("cleared");
 	}
-	
+
 	check_stable = 0;
-	
+
 	cW = document.getElementById("cW").value;
 	cH = document.getElementById("cH").value;
-	
+
 	var size = document.getElementById("size").value;
 
 	selectedTile = null;
-	
+
 	var nbIt = document.getElementById("penroseIt").value;
-	
+
 	currentTiling.cmap = cmap;
-	
+
 	app.controls.zoomCamera();
 	app.controls.object.updateProjectionMatrix();
 
 	app.scene.add(currentTiling.mesh);
-	
+
 	currentTiling.colorTiles();
 	//console.log(currentTiling);
-	
+
 	enableWireFrame(document.getElementById("wireFrameToggle"));
 
 	playWithDelay();
 
 	var render = function () {
-		requestAnimationFrame( render );
+		requestAnimationFrame(render);
 		app.controls.update();
-		app.renderer.render( app.scene, app.camera );
+		app.renderer.render(app.scene, app.camera);
 	};
 	render();
 }
@@ -559,22 +561,22 @@ function sleep(ms) {
 //
 //			Called by a routine.
 // ------------------------------------------------
-function refresh_zoom(){
-	if(app)
+function refresh_zoom() {
+	if (app)
 		document.getElementById("zoomLevel").value = Math.round(app.camera.zoom * 100);
 }
 
 // ------------------------------------------------
 // 	[ 5.3 ] 	Locally saves tiling
 // ------------------------------------------------
-function saveConfiguration(){
-	if(currentTiling){
+function saveConfiguration() {
+	if (currentTiling) {
 		var config_name = prompt("Enter configuration name : ", "Configuration " + savedConfigs.length);
 		if (config_name == null || config_name == "") {
 			return;
 		}
-		document.getElementById("complexOperationValue").innerHTML += '<option value="CNFG'+ savedConfigs.length +'">' + config_name + '</option>';
-		
+		document.getElementById("complexOperationValue").innerHTML += '<option value="CNFG' + savedConfigs.length + '">' + config_name + '</option>';
+
 		savedConfigs.push(currentTiling.hiddenCopy());
 	}
 }
@@ -592,21 +594,21 @@ function saveConfiguration(){
 var mouse = new THREE.Vector2(); // un Vector2 contient un attribut x et un attribut y
 var raycaster = new THREE.Raycaster(); // rayon qui va intersecter la pile de sable
 
-app.renderer.domElement.addEventListener('mousemove', function( event ) {
-	if(holdMouse){
+app.renderer.domElement.addEventListener('mousemove', function (event) {
+	if (holdMouse) {
 		CanvasClick(event, false);
 	}
-  }, false);
-  
+}, false);
 
-app.renderer.domElement.addEventListener('mousedown', function( event ) {
+
+app.renderer.domElement.addEventListener('mousedown', function (event) {
 	CanvasClick(event, true);
-  }, false);
- 
-  
-function CanvasClick(event, force){
-	
-	
+}, false);
+
+
+function CanvasClick(event, force) {
+
+
 	//on calcule un ration entre -1 et 1 pour chaque coordonées x et y du clique
 	//si mouse.x == -1 alors on a cliqué tout à gauche
 	//si mouse.x ==  1 alors on a cliqué tout à droite
@@ -614,18 +616,18 @@ function CanvasClick(event, force){
 	//si mouse.y ==  1 alors on a cliqué tout en haut
 	var rect = app.renderer.domElement.getBoundingClientRect(); // correction de la position de la souris par rapport au canvas
 
-    mouse.x = ((event.clientX - rect.left) / app.WIDTH ) * 2 - 1;
-	mouse.y = - ((event.clientY - rect.top) / app.HEIGHT ) * 2 + 1;
+	mouse.x = ((event.clientX - rect.left) / app.WIDTH) * 2 - 1;
+	mouse.y = - ((event.clientY - rect.top) / app.HEIGHT) * 2 + 1;
 
 	// on paramète le rayon selon les ratios et la camera
 	raycaster.setFromCamera(mouse, app.camera);
 	// l'objet intersects est u tableau qui contient toutes les faces intersectés par le rayon
 
-	if(app.scene.children.length > 0){
+	if (app.scene.children.length > 0) {
 
 		var intersects = raycaster.intersectObject(app.scene.children[0]);
 
-		if(intersects.length > 0){
+		if (intersects.length > 0) {
 
 			var face = intersects[0];
 			var triangleIndex = face.faceIndex;
@@ -633,41 +635,41 @@ function CanvasClick(event, force){
 
 			var mouseTODO = document.getElementById("mouseOperation").value;
 			previousTile = lastTile;
-			lastTile =  currentTiling.indexDict[face.faceIndex*3];
-			if(!force && previousTile == lastTile)
+			lastTile = currentTiling.indexDict[face.faceIndex * 3];
+			if (!force && previousTile == lastTile)
 				return
-			switch(mouseTODO){
+			switch (mouseTODO) {
 				case "rmOne":
 					currentTiling.lastChange = 0;
 					var brush_t = zone(lastTile, document.getElementById("brushRange").value)
-					for(var k=0; k<brush_t.length; k++){
+					for (var k = 0; k < brush_t.length; k++) {
 						currentTiling.remove(brush_t[k], nbTimes);
 					}
 					break;
-				
+
 				case "setOne":
 					currentTiling.lastChange = 0;
 					var brush_t = zone(lastTile, document.getElementById("brushRange").value)
-					for(var k=0; k<brush_t.length; k++){
+					for (var k = 0; k < brush_t.length; k++) {
 						currentTiling.set(brush_t[k], nbTimes);
 					}
 					break;
 
 				case "select":
-					if(currentTiling.selectedIndex)
+					if (currentTiling.selectedIndex)
 						currentTiling.colorTile(currentTiling.selectedIndex);
 					selectedTile = lastTile;
-					
+
 					console.log(currentTiling.tiles[selectedTile]);
 					tileInfo.innerHTML = "Tile index : " + selectedTile + "<br>Sand : " + currentTiling.tiles[selectedTile].sand;
-					currentTiling.selectedIndex = currentTiling.indexDict[face.faceIndex*3];
+					currentTiling.selectedIndex = currentTiling.indexDict[face.faceIndex * 3];
 					break;
 
 				default:
 					currentTiling.lastChange = 0;
 					// currentTiling.add(lastTile, nbTimes);
 					var brush_t = zone(lastTile, document.getElementById("brushRange").value)
-					for(var k=0; k<brush_t.length; k++){
+					for (var k = 0; k < brush_t.length; k++) {
 						currentTiling.add(brush_t[k], nbTimes);
 					}
 					break;
@@ -676,38 +678,38 @@ function CanvasClick(event, force){
 		}
 	}
 }
-  
-app.renderer.domElement.onmousedown = function() {
 
-holdMouse = true;
+app.renderer.domElement.onmousedown = function () {
 
-}
-
-document.body.onmouseup = function() {
-holdMouse = false;
+	holdMouse = true;
 
 }
 
-function depth_first(index, size, shared=[]){
-	if(size==0)
+document.body.onmouseup = function () {
+	holdMouse = false;
+
+}
+
+function depth_first(index, size, shared = []) {
+	if (size == 0)
 		return []
-	if(!shared.includes(index))
+	if (!shared.includes(index))
 		shared.push(index);
-	for(var i=0; i<currentTiling.tiles[index].neighbors.length; i++){
-		if(!shared.includes(currentTiling.tiles[index].neighbors[i]))
+	for (var i = 0; i < currentTiling.tiles[index].neighbors.length; i++) {
+		if (!shared.includes(currentTiling.tiles[index].neighbors[i]))
 			shared.push(currentTiling.tiles[index].neighbors[i]);
 	}
-	for(var i=0; i<currentTiling.tiles[index].neighbors.length; i++){
-		depth_first(currentTiling.tiles[index].neighbors[i], size-1, shared)
+	for (var i = 0; i < currentTiling.tiles[index].neighbors.length; i++) {
+		depth_first(currentTiling.tiles[index].neighbors[i], size - 1, shared)
 	}
 	return shared
 }
 
-function zone(index, size){
-	if(size == 1){
+function zone(index, size) {
+	if (size == 1) {
 		return [index];
-	} else{
-		return depth_first(index, size-1);
+	} else {
+		return depth_first(index, size - 1);
 	}
 }
 

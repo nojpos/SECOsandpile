@@ -259,20 +259,23 @@
 		</div>
 
 		<!-- ############################################################ Informations -->
-		<!-- <div class="controlGroup" style="height:400px; position:relative;">
-			<p class="groupTitle">Informations</p>
+		<div class="controlGroup" style="height:400px; position:relative;">
+			<p class="groupTitle">Informações</p>
 
-			<span id="tileInfo">Selected tile info</span>
+			<!-- <span id="tileInfo">Selected tile info</span>
 
 			<br>
 			<button id="statsButton" style="position:absolute; top:32px; right:10px;" onclick="show_stats()"
 				class="btn btn-default"> Get stats </button>
-			<br>
+			<br> -->
 			<p id="statsInfo"></p>
 
-			<button id="createStats" style="position:absolute; bottom:10px; left:10px;"
-				class="btn btn-default">Stabilization stats file</button>
-		</div> -->
+			<canvas id="myChartAvalanches"></canvas>
+			<canvas id="myChartGraosPerdidos"></canvas>
+
+			<!-- <button id="createStats" style="position:absolute; bottom:10px; left:10px;"
+				class="btn btn-default">Stabilization stats file</button> -->
+		</div>
 
 		<!-- ############################################################ Roundness -->
 		<!-- <div class="controlGroup" style="height:360px;">
@@ -407,6 +410,7 @@
 
 	<script src="assets/js/Features/ChangeDisplay.js"></script>
 	<script src="assets/js/Features/ImportExport.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<script src="assets/js/Features/Stats.js"></script>
 	<script src="assets/js/Features/Harmonics.js"></script>
 	<script src="assets/js/Features/Roundness.js"></script>

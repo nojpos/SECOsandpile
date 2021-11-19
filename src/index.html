@@ -1,235 +1,422 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SECOsandpile</title>
+    <link rel="icon" href="favicon.ico" />
+    <base href="/" />
+    <!-- ####################################################### CSS IMPORTS -->
+    <style>
+      @import "assets/css/bootstrap.min.css";
+      @import "assets/css/scrollbar.css";
+      @import "assets/css/modal.css";
+      @import "assets/css/elements.css";
+    </style>
+  </head>
 
-<head>
-	<meta charset="UTF-8">
-	<title>SECOsandpile</title>
-	<link rel="icon" href="favicon.ico" />
-	<base href="/">
-	<!-- ####################################################### CSS IMPORTS -->
-	<style>
-		@import "assets/css/bootstrap.min.css";
-		@import "assets/css/scrollbar.css";
-		@import "assets/css/modal.css";
-		@import "assets/css/elements.css";
-	</style>
-</head>
+  <body>
+    <app-root></app-root>
+    <!-- ################################################################ UPPER BAR -->
+    <header>
+      <span
+        style="
+          margin-left: 10px;
+          margin-right: 80px;
+          font-size: 35px;
+          font-weight: bold;
+        "
+        >SECOsandpile</span
+      >
+      Zoom (%):
+      <input
+        type="number"
+        id="zoomLevel"
+        style="margin-right: 20px"
+        oninput="set_zoom(this)"
+        value="100"
+        max="9999"
+        step="10"
+      />
+      Tempo entre passos (ms):
+      <input
+        type="number"
+        id="delay"
+        style="margin-right: 20px"
+        value="100"
+        oninput="changeDelay(this);"
+        min="0"
+        max="10000"
+      />
+      Taxa de atualização:
+      <input
+        type="number"
+        id="IPF"
+        style="margin-right: 80px"
+        value="1"
+        oninput="changeIPS(this);"
+        min="1"
+        max="999"
+      />
+      <button
+        id="playButton"
+        onclick="playPause(this)"
+        class="btn btn-default"
+        style="margin-right: 20px; font-weight: bold"
+      >
+        Iniciar
+      </button>
+      <button
+        onclick="step()"
+        style="margin-right: 20px"
+        class="btn btn-default"
+      >
+        Passo
+      </button>
+      <span id="number_of_steps"></span>
+      <button
+        onclick="reset_number_of_steps()"
+        style="margin-right: 20px"
+        class="btn btn-default"
+      >
+        Reiniciar contador
+      </button>
 
-<body>
-	<app-root></app-root>
-	<!-- ################################################################ UPPER BAR -->
-	<header>
-		<span style="margin-left:10px; margin-right:80px; font-size:35px; font-weight:bold;">SECOsandpile</span>
-		Zoom (%):
-		<input type="number" id="zoomLevel" style="margin-right:20px" oninput="set_zoom(this)" value="100" max="9999"
-			step="10" />
-		Tempo entre passos (ms):
-		<input type="number" id="delay" style="margin-right:20px" value="100" oninput="changeDelay(this);" min="0"
-			max="10000" />
-		Taxa de atualização:
-		<input type="number" id="IPF" style="margin-right:80px" value="1" oninput="changeIPS(this);" min="1"
-			max="999" />
-		<button id="playButton" onclick="playPause(this)" class="btn btn-default"
-			style="margin-right:20px; font-weight:bold;">Iniciar</button>
-		<button onclick="step()" style="margin-right:20px" class="btn btn-default">Passo</button>
-		<span id="number_of_steps"></span>
-		<button onclick="reset_number_of_steps()" style="margin-right:20px" class="btn btn-default">Reiniciar
-			contador</button>
+      <!-- <button id="stabilizeButton"  onclick="stabTiling()" class="btn btn-primary">Stabilize</button> -->
 
-		<!-- <button id="stabilizeButton"  onclick="stabTiling()" class="btn btn-primary">Stabilize</button> -->
+      <!-- Upper right alignment -->
+      <span style="position: absolute; top: 10px; right: 50px">
+        Pausa automática:
+      </span>
+      <label class="switch" style="position: absolute; top: 12px; right: 10px">
+        <input type="checkbox" id="pauseToggle" checked="true" />
+        <span class="slider round"></span>
+      </label>
 
-		<!-- Upper right alignment -->
-		<span style="position:absolute; top:10px; right:50px"> Pausa automática: </span>
-		<label class="switch" style="position:absolute; top:12px; right:10px">
-			<input type="checkbox" id="pauseToggle" checked="true">
-			<span class="slider round"></span>
-		</label>
+      <!-- Upper right alignment -->
+      <span style="position: absolute; top: 30px; right: 50px">
+        Exibir linhas:
+      </span>
+      <label class="switch" style="position: absolute; top: 32px; right: 10px">
+        <input
+          type="checkbox"
+          id="wireFrameToggle"
+          oninput="enableWireFrame(this);"
+          checked="false"
+        />
+        <span class="slider round"></span>
+      </label>
+    </header>
 
-		<!-- Upper right alignment -->
-		<span style="position:absolute; top:30px; right:50px"> Exibir linhas: </span>
-		<label class="switch" style="position:absolute; top:32px; right:10px">
-			<input type="checkbox" id="wireFrameToggle" oninput="enableWireFrame(this);" checked="false">
-			<span class="slider round"></span>
-		</label>
+    <!-- ################################################################ CONTROL (LEFT) BAR -->
+    <nav>
+      <!-- ############################################################ Main Controls -->
+      <div id="main controls" class="controlGroup">
+        <div class="btn-group" role="group" aria-label="Checkbox Fractais">
+          <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="optionsFractal()">
+          <label class="btn btn-outrline-primary" for="btncheck1">Opções para Fractais</label>
+        </div>
+        <p class="groupTitle">Seleção de matriz</p>
+        <select id="TilingSelect" onchange="hideParams()" style="display: none;">
+          <optgroup label="Regular">
+            <option value="sqTiling">Square Tiling</option>
+            <option value="hexTiling">Hexagonal Tiling</option>
+            <option value="triTiling">Triangular Tiling</option>
+          </optgroup>
+          <optgroup label="Cut and Project (via Mutligrid)">
+            <option value="PenroseCutandproject">Penrose P3 (rhomb)</option>
+            <option value="AmmannBeenkerCutandproject">Ammann-Beenker</option>
+            <option value="TwelveFoldCutandproject">12-fold</option>
+            <option value="GoldenOctogonalCutandproject">
+              Golden octogonal (random shift)
+            </option>
+            <option value="RauzyCutandproject">Rauzy (random shift)</option>
+          </optgroup>
+          <optgroup label="Substitution: Penrose P2 (kite-dart)">
+            <option value="P2sunbysubst">Sun</option>
+            <option value="P2starbysubst">Star</option>
+            <option value="HKKDPenrose">
+              Half-kite (from Robinson triangles)
+            </option>
+            <option value="HDKDPenrose">
+              Half-dart (from Robinson triangles)
+            </option>
+            <option value="SunKDPenrose">Sun (from Robinson triangles)</option>
+            <option value="StarKDPenrose">
+              Star (from Robinson triangles)
+            </option>
+          </optgroup>
+          <optgroup label="Substitution: Penrose P3 (rhomb)">
+            <option value="P3sunbysubst">Sun</option>
+            <option value="P3star1bysubst">Star1</option>
+            <option value="P3star2bysubst">Star2</option>
+            <option value="HKRPenrose">
+              Half-kite (from Robinson triangles)
+            </option>
+            <option value="HDRPenrose">
+              Half-dart (from Robinson triangles)
+            </option>
+            <option value="SunRPenrose">Sun (from Robinson triangles)</option>
+            <option value="StarRPenrose">Star (from Robinson triangles)</option>
+          </optgroup>
+          <optgroup label="Substitution: Penrose P0 (Robinson triangles)">
+            <option value="penrose0">Half-kite</option>
+          </optgroup>
+          <optgroup label="Substitution: Others">
+            <option value="A5bysubst">Ammann-Beenker</option>
+            <option value="BB1bysubst">Birds and Bees 1</option>
+            <option value="TriangleIncenter">Triangle Incenter</option>
+          </optgroup>
+          <optgroup label="Symmetry Free">
+            <option value="sqD2">D2 Square</option>
+            <option value="sqD4">D4 Square</option>
+          </optgroup>
+          <optgroup label="Misc.">
+            <option value="sqTilingMoore">Square Moore</option>
+            <option value="sqTilingCircle">
+              Square Tiling croped to circle
+            </option>
+            <option value="pythagorean">Pythagorean</option>
+            <option value="truncSq">Truncated Square</option>
+            <option value="cairoPenta">Cairo Pentagonal</option>
+          </optgroup>
+        </select>
 
-	</header>
-
-	<!-- ################################################################ CONTROL (LEFT) BAR -->
-	<nav>
-
-		<!-- ############################################################ Main Controls -->
-		<div id="main controls" class="controlGroup">
-			<p class="groupTitle">Seleção de matriz</p>
-			<select id="TilingSelect" onchange="hideParams()">
-				<optgroup label="Regular">
-					<option value="sqTiling">Square Tiling</option>
-					<option value="hexTiling">Hexagonal Tiling</option>
-					<option value="triTiling">Triangular Tiling</option>
-				</optgroup>
-				<optgroup label="Cut and Project (via Mutligrid)">
-					<option value="PenroseCutandproject">Penrose P3 (rhomb)</option>
-					<option value="AmmannBeenkerCutandproject">Ammann-Beenker</option>
-					<option value="TwelveFoldCutandproject">12-fold</option>
-					<option value="GoldenOctogonalCutandproject">Golden octogonal (random shift)</option>
-					<option value="RauzyCutandproject">Rauzy (random shift)</option>
-				</optgroup>
-				<optgroup label="Substitution: Penrose P2 (kite-dart)">
-					<option value="P2sunbysubst">Sun</option>
-					<option value="P2starbysubst">Star</option>
-					<option value="HKKDPenrose">Half-kite (from Robinson triangles)</option>
-					<option value="HDKDPenrose">Half-dart (from Robinson triangles)</option>
-					<option value="SunKDPenrose">Sun (from Robinson triangles)</option>
-					<option value="StarKDPenrose">Star (from Robinson triangles)</option>
-				</optgroup>
-				<optgroup label="Substitution: Penrose P3 (rhomb)">
-					<option value="P3sunbysubst">Sun</option>
-					<option value="P3star1bysubst">Star1</option>
-					<option value="P3star2bysubst">Star2</option>
-					<option value="HKRPenrose">Half-kite (from Robinson triangles)</option>
-					<option value="HDRPenrose">Half-dart (from Robinson triangles)</option>
-					<option value="SunRPenrose">Sun (from Robinson triangles)</option>
-					<option value="StarRPenrose">Star (from Robinson triangles)</option>
-				</optgroup>
-				<optgroup label="Substitution: Penrose P0 (Robinson triangles)">
-					<option value="penrose0">Half-kite</option>
-				</optgroup>
-				<optgroup label="Substitution: Others">
-					<option value="A5bysubst">Ammann-Beenker</option>
-					<option value="BB1bysubst">Birds and Bees 1</option>
-					<option value="TriangleIncenter">Triangle Incenter</option>
-				</optgroup>
-				<optgroup label="Symmetry Free">
-					<option value="sqD2">D2 Square</option>
-					<option value="sqD4">D4 Square</option>
-				</optgroup>
-				<optgroup label="Misc.">
-					<option value="sqTilingMoore">Square Moore</option>
-					<option value="sqTilingCircle">Square Tiling croped to circle</option>
-					<option value="pythagorean">Pythagorean</option>
-					<option value="truncSq">Truncated Square</option>
-					<option value="cairoPenta">Cairo Pentagonal</option>
-				</optgroup>
-
-			</select>
-
-			<!--<form id="postCustom" enctype="multipart/form-data" action="/upload/image" method="post">
+        <!--<form id="postCustom" enctype="multipart/form-data" action="/upload/image" method="post">
 					<input type="file" id="inputCustom" accept=".png,.jpg,.jpeg,.bmp" style="display:none;" />
 				</form>-->
-			<button onclick='drawTiling()' style="margin-left:25px; font-weight:bold;" class="btn btn-default">Criar Matriz</button>
-			<br>
+        <button
+          onclick="drawTiling()"
+          style="margin-left: 25px; font-weight: bold"
+          class="btn btn-default"
+        >
+          Criar Matriz
+        </button>
+        <br />
 
+        <!-- Tiling-specific controls -->
+        <p class="groupTitle" id="paramTitle">Parâmetros</p>
+        <!-- Square controls -->
+        <div id="paramHide">
+          <span id="p_width">
+            Largura:
+            <input
+              type="number"
+              id="cW"
+              min="0"
+              value="100"
+              style="width: 50px"
+            />
+          </span>
 
-			<!-- Tiling-specific controls -->
-			<p class="groupTitle" id="paramTitle">Parâmetros</p>
-			<!-- Square controls -->
-			<div id="paramHide">
-				<span id="p_width">
-					Largura:
-					<input type="number" id="cW" min="0" value="100" style="width: 50px;" />
-				</span>
+          <span id="p_height">
+            &nbsp; &nbsp; Altura:
+            <input
+              type="number"
+              id="cH"
+              min="0"
+              value="100"
+              style="width: 50px" />
+            <br
+          /></span>
 
-				<span id="p_height">
-					&nbsp; &nbsp; Altura:
-					<input type="number" id="cH" min="0" value="100" style="width: 50px;" />
-					<br></span>
+          <span id="p_size" style="display: none">
+            Size :
+            <input
+              type="number"
+              id="size"
+              min="0"
+              value="20"
+              style="width: 50px" />
+            <br
+          /></span>
 
-				<span id="p_size" style="display:none;">
-					Size :
-					<input type="number" id="size" min="0" value="20" style="width: 50px;" />
-					<br></span>
+          <!-- Penrose controls -->
+          <span id="p_iterations" style="display: none">
+            Iterations :
+            <input
+              type="number"
+              style="width: 50px"
+              id="penroseIt"
+              min="0"
+              value="4" />
+            <br
+          /></span>
+        </div>
+      </div>
+      <!-- Main controls  -->
 
-				<!-- Penrose controls -->
-				<span id="p_iterations" style="display:none;">
-					Iterations :
-					<input type="number" style="width: 50px;" id="penroseIt" min="0" value="4" />
-					<br></span>
+      <!-- ############################################################ Mouse Controls -->
+      <div id="mouse controls" class="controlGroup">
+        <p class="groupTitle">Controles do mouse</p>
+        <select id="mouseOperation">
+          <option value="addOne">Adicionar</option>
+          <option value="rmOne">Remover</option>
+          <option value="setOne">Definir</option>
+          <option value="select">Selecionar</option>
+        </select>
+        <div id="maskMouseRepeat" style="display: inline">
+          &nbsp;&nbsp;vezes&nbsp;&nbsp;
+          <input
+            type="number"
+            id="mouseOperationRepeat"
+            value="1"
+            min="0"
+            max="999999"
+            style="width: 70px"
+          />
+        </div>
+        <br /><br />
+        <div style="display: flex">
+          Raio do mouse :
+          <input
+            type="range"
+            min="1"
+            max="8"
+            value="1"
+            step="1"
+            id="brushRange"
+            style="width: 150px; margin-left: 10px"
+            list="steplist"
+          />
+          <datalist id="steplist">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+          </datalist>
+        </div>
+      </div>
+      <!-- Mouse controls -->
 
-			</div>
-		</div> <!-- Main controls  -->
+      <!-- ############################################################ Operations / Secondary Controls -->
+      <div id="secondary controls" class="controlGroup">
+        <p class="groupTitle">Operações da pilha de areia</p>
+        <select id="complexOperationValue">
+          <option value="MaxS">Estável máx.</option>
+          <option value="OneE">Um em todo lugar</option>
+          <option value="Dual">Duplo</option>
+          <option value="Iden">Identidade</option>
+          <option value="Inve">Inversa</option>
+          <option value="Rand">Aleatória</option>
+        </select>
+        <div id="complexTimesMask" style="display: inline">
+          &nbsp;&nbsp;vezes&nbsp;&nbsp;
+          <input
+            type="number"
+            id="complexOperationRepeat"
+            min="0"
+            value="1"
+            max="999999"
+            style="width: 70px"
+          />
+        </div>
+        <br />
+        <div
+          style="
+            margin-left: auto;
+            margin-right: auto;
+            display: table;
+            margin-top: 10px;
+          "
+          class="btn-group"
+        >
+          <button
+            id="complexOperationAdd"
+            onclick="complexOperationAdd()"
+            class="btn btn-default"
+          >
+            Adicionar
+          </button>
 
-		<!-- ############################################################ Mouse Controls -->
-		<div id="mouse controls" class="controlGroup">
-			<p class="groupTitle">Controles do mouse</p>
-			<select id="mouseOperation">
-				<option value="addOne">Adicionar</option>
-				<option value="rmOne">Remover</option>
-				<option value="setOne">Definir</option>
-				<option value="select">Selecionar</option>
-			</select>
-			<div id="maskMouseRepeat" style="display:inline;">
-				&nbsp;&nbsp;vezes&nbsp;&nbsp;
-				<input type="number" id="mouseOperationRepeat" value="1" min="0" max="999999" style="width: 70px;" />
-			</div>
-			<br><br>
-			<div style="display:flex;">
-				Raio do mouse :
-				<input type="range" min="1" max="8" value="1" step="1" id="brushRange"
-					style="width:150px;margin-left:10px;" list="steplist">
-				<datalist id="steplist">
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>
-					<option>6</option>
-					<option>7</option>
-					<option>8</option>
-				</datalist>
-			</div>
-		</div> <!-- Mouse controls -->
+          <button
+            id="complexOperationSub"
+            onclick="complexOperationSub()"
+            class="btn btn-default"
+          >
+            Subtrair
+          </button>
 
-		<!-- ############################################################ Operations / Secondary Controls -->
-		<div id="secondary controls" class="controlGroup">
-			<p class="groupTitle">Operações da pilha de areia</p>
-			<select id="complexOperationValue">
-				<option value="MaxS">Estável máx.</option>
-				<option value="OneE">Um em todo lugar</option>
-				<option value="Dual">Duplo</option>
-				<option value="Iden">Identidade</option>
-				<option value="Inve">Inversa</option>
-				<option value="Rand">Aleatória</option>
-			</select>
-			<div id="complexTimesMask" style="display:inline;">
-				&nbsp;&nbsp;vezes&nbsp;&nbsp;
-				<input type="number" id="complexOperationRepeat" min="0" value="1" max="999999" style="width: 70px;" />
-			</div>
-			<br>
-			<div style="margin-left:auto; margin-right:auto; display:table; margin-top:10px;" class="btn-group">
-				<button id="complexOperationAdd" onclick="complexOperationAdd()" class="btn btn-default">Adicionar</button>
+          <button
+            id="complexOperationSet"
+            onclick="complexOperationSet()"
+            class="btn btn-default"
+          >
+            Definir
+          </button>
+        </div>
+        <button
+          onclick="clearTiling()"
+          class="btn btn-default"
+          style="
+            margin-top: 10px;
+            display: table;
+            width: -webkit-fill-available;
+          "
+        >
+          Limpar
+        </button>
+        <button
+          id="saveConfig"
+          onclick="saveConfiguration()"
+          style="
+            margin-top: 10px;
+            display: table;
+            width: -webkit-fill-available; ;
+          "
+          class="btn btn-default"
+        >
+          Salvar Configurações
+        </button>
 
-				<button id="complexOperationSub" onclick="complexOperationSub()"
-					class="btn btn-default">Subtrair</button>
+        <!-- Random Seeding -->
+        <div id="seedMask" style="margin-top: 10px">
+          Semente aleatória:
+          <input
+            id="randSeed"
+            value="1"
+            oninput="changeSeed(this);"
+            style="width: 60px"
+          />
+        </div>
+      </div>
+      <!-- Operations controls -->
 
-				<button id="complexOperationSet" onclick="complexOperationSet()" class="btn btn-default">Definir</button>
-			</div>
-			<button onclick="clearTiling()" class="btn btn-default"
-				style="margin-top:10px;display: table;width: -webkit-fill-available;">Limpar</button>
-			<button id="saveConfig" onclick="saveConfiguration()"
-				style="margin-top:10px;display: table;width: -webkit-fill-available;;" class="btn btn-default">Salvar Configurações</button>
+      <!-- ############################################################ Stabilization -->
+      <div class="controlGroup">
+        <p class="groupTitle">Processos da pilha de areia</p>
+        <button onclick="steps()" class="btn btn-default">Passo</button>
+        &nbsp;&nbsp;vezes&nbsp;&nbsp;
+        <input
+          type="number"
+          id="stepsRepeat"
+          value="1"
+          min="1"
+          max="999999"
+          style="width: 70px"
+        />
+        <br />
+        <div
+          style="
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10px;
+            display: grid;
+          "
+        >
+          <button onclick="stabTiling()" class="btn btn-default">
+            Estabilizar
+          </button>
+        </div>
+      </div>
 
-			<!-- Random Seeding -->
-			<div id="seedMask" style="margin-top:10px;">
-				Semente aleatória:
-				<input id="randSeed" value="1" oninput="changeSeed(this);" style="width: 60px;" />
-			</div>
-		</div> <!-- Operations controls -->
-
-		<!-- ############################################################ Stabilization -->
-		<div class="controlGroup">
-			<p class="groupTitle">Processos da pilha de areia</p>
-			<button onclick="steps()" class="btn btn-default">Passo</button>
-			&nbsp;&nbsp;vezes&nbsp;&nbsp;
-			<input type="number" id="stepsRepeat" value="1" min="1" max="999999" style="width: 70px;" />
-			<br>
-			<div style="margin-left:auto; margin-right:auto; margin-top:10px; display:grid">
-				<button onclick="stabTiling()" class="btn btn-default">Estabilizar</button>
-			</div>
-		</div>
-
-		<!-- ############################################################ Import/Export -->
-		<!-- <div class="controlGroup"> -->
-		<!-- File importing -->
-		<!-- <p class="groupTitle">Import/Export</p>
+      <!-- ############################################################ Import/Export -->
+      <!-- <div class="controlGroup"> -->
+      <!-- File importing -->
+      <!-- <p class="groupTitle">Import/Export</p>
 			<div style="margin-left:auto; margin-right:auto; display:grid">
 				<label for="files" class="btn btn-default">
 					Import from JSON
@@ -242,8 +429,8 @@
 				</label>
 			</div> -->
 
-		<!-- File button not displayed, and a JS command clicks on them. -->
-		<!-- <input type="file" id="files" name="files[]" accept=".JSON" multiple style="display:none;" />
+      <!-- File button not displayed, and a JS command clicks on them. -->
+      <!-- <input type="file" id="files" name="files[]" accept=".JSON" multiple style="display:none;" />
 			<input type="file" id="filesPIC" name="files2[]" accept=".png,.jpg,.jpeg,.bmp" multiple
 				style="display:none;" />
 			<output id="list" style="display:none;"></output>
@@ -251,64 +438,81 @@
 			<a download="sandpile.json" id="downloadlink" style="display: none">Download</a>
 		</div> -->
 
-		<!-- ############################################################ Misc Controls -->
-		<div class="controlGroup">
-			<p class="groupTitle">Controles diversos</p>
-			<button id="colorButton" style="margin-left:auto;margin-right:auto;display:block;"
-				class="btn btn-default">Alterar cores</button>
-		</div>
+      <!-- ############################################################ Misc Controls -->
+      <div class="controlGroup">
+        <p class="groupTitle">Controles diversos</p>
+        <button
+          id="colorButton"
+          style="margin-left: auto; margin-right: auto; display: block"
+          class="btn btn-default"
+        >
+          Alterar cores
+        </button>
+        <button
+          id="HowTo"
+          style="
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            margin-top: 10px;
+          "
+          class="btn btn-dark btn-sm"
+        >
+          Como utilizar
+        </button>
+      </div>
 
-		<!-- ############################################################ Informations -->
-		<div class="controlGroup" style="height:400px; position:relative;">
-			<p class="groupTitle">Informações</p>
+      <!-- ############################################################ Informations -->
+      <div class="controlGroup" style="height: 400px; position: relative">
+        <p class="groupTitle">Informações</p>
 
-			<!-- <span id="tileInfo">Selected tile info</span>
+        <!-- <span id="tileInfo">Selected tile info</span>
 
 			<br>
 			<button id="statsButton" style="position:absolute; top:32px; right:10px;" onclick="show_stats()"
 				class="btn btn-default"> Get stats </button>
 			<br> -->
-			<p id="statsInfo"></p>
+        <p id="statsInfo"></p>
 
-			<canvas id="myChartAvalanches"></canvas>
-			<canvas id="myChartGraosPerdidos"></canvas>
+        <canvas id="myChartAvalanches"></canvas>
+        <canvas id="myChartGraosPerdidos"></canvas>
 
-			<!-- <button id="createStats" style="position:absolute; bottom:10px; left:10px;"
+        <!-- <button id="createStats" style="position:absolute; bottom:10px; left:10px;"
 				class="btn btn-default">Stabilization stats file</button> -->
-		</div>
+      </div>
 
-		<!-- ############################################################ Roundness -->
-		<!-- <div class="controlGroup" style="height:360px;">
+      <!-- ############################################################ Roundness -->
+      <!-- <div class="controlGroup" style="height:360px;">
 			<p class="groupTitle">Roundness</p> -->
-		<!-- Animate -->
-		<!-- Animate :
+      <!-- Animate -->
+      <!-- Animate :
 			<label class="switch" style="margin-top:5px">
 				<input type="checkbox" id="roundAnimate" checked="true">
 				<span class="slider round"></span>
 			</label> -->
-		<!-- Roundness buttons-->
-		<!-- <div style="margin-left:auto; margin-right:auto; display:grid"> -->
-		<!-- Roundness file -->
-		<!-- <button id="createRoundness" style="margin-top:5px;" class="btn btn-default">Compute roundness
+      <!-- Roundness buttons-->
+      <!-- <div style="margin-left:auto; margin-right:auto; display:grid"> -->
+      <!-- Roundness file -->
+      <!-- <button id="createRoundness" style="margin-top:5px;" class="btn btn-default">Compute roundness
 					file</button> -->
-		<!-- Roundness fast -->
-		<!-- <button id="createRoundnessFast" style="margin-top:5px;" class="btn btn-default">Fast (circle shrink
+      <!-- Roundness fast -->
+      <!-- <button id="createRoundnessFast" style="margin-top:5px;" class="btn btn-default">Fast (circle shrink
 					only)</button> -->
-		<!-- Export frontier to tikz -->
-		<!-- <button id="export_frontierTikz" onclick="export_frontierTikz()" style="margin-top:5px;"
+      <!-- Export frontier to tikz -->
+      <!-- <button id="export_frontierTikz" onclick="export_frontierTikz()" style="margin-top:5px;"
 					class="btn btn-default">Export frontier to TIKZ</button>
 			</div> -->
-		<!-- Show radii and current roundness -->
-		<!-- <div style="margin-top:10px;"> -->
-		<!-- Radii -->
-		<!-- Show Xscribed radii :
+      <!-- Show radii and current roundness -->
+      <!-- <div style="margin-top:10px;"> -->
+      <!-- Radii -->
+      <!-- Show Xscribed radii :
 				<label class="switch" style="">
 					<input type="checkbox" id="radiiShow" oninput="radii(this);">
 					<span class="slider round"></span>
 				</label>
 				<br> -->
-		<!-- Roundness now -->
-		<!-- Show current roundness :
+      <!-- Roundness now -->
+      <!-- Show current roundness :
 				<label class="switch" style="">
 					<input type="checkbox" id="roundShow" oninput="roundness(this);">
 					<span class="slider round"></span>
@@ -319,11 +523,11 @@
 			</div>
 		</div> -->
 
-		<!-- ############################################################ Harmonics -->
-		<!-- <div class="controlGroup">
+      <!-- ############################################################ Harmonics -->
+      <!-- <div class="controlGroup">
 			<p class="groupTitle">Harmonics</p> -->
-		<!-- Harmonics -->
-		<!-- <select id="harmonicValue" style="width:100px">
+      <!-- Harmonics -->
+      <!-- <select id="harmonicValue" style="width:100px">
 				<option value="1A">1A</option>
 				<option value="1B">1B</option>
 				<option value="2A">2A</option>
@@ -338,8 +542,8 @@
 			<br />
 		</div> -->
 
-		<!-- ############################################################ Batch procesings -->
-		<!-- <div class="controlGroup">
+      <!-- ############################################################ Batch procesings -->
+      <!-- <div class="controlGroup">
 			<p class="groupTitle">Batch processings</p>
 			<div style="margin-left:auto; margin-right:auto; display:grid">
 				<button id="batch_identities" onclick="batch_identities()"
@@ -351,8 +555,8 @@
 			</div>
 		</div> -->
 
-		<!-- ############################################################ Credits -->
-		<!-- <div class="credits">
+      <!-- ############################################################ Credits -->
+      <!-- <div class="credits">
 			<img src="./css/cc-heart.png" style="height:16px">
 			<a href="https://creativecommons.org/licenses/by/4.0/">CC-BY</a><br />
 			Valentin Darrigo<br />
@@ -361,63 +565,68 @@
 			See the <a href="https://github.com/huacayacauh/JS-Sandpile/wiki">wiki</a>
 			and <a href="https://github.com/huacayacauh/JS-Sandpile/">code</a> on github
 		</div> -->
+    </nav>
+    <!-- ######################################################### End of Control bar -->
 
-	</nav> <!-- ######################################################### End of Control bar -->
+    <!-- ################################################################ Color picking window -->
+    <div id="colors" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+      </div>
+    </div>
 
+    <!-- ################################################################ Canvas -->
+    <div class="canvasDiv" id="canvasHolder"></div>
 
-	<!-- ################################################################ Color picking window -->
-	<div id="colors" class="modal">
-		<div class="modal-content">
-			<span class="close">&times;</span>
-		</div>
-	</div>
+    <!-- ######### Script para levar pro Wiki -->
+    <script type="text/javascript">
+      document.getElementById("HowTo").onclick = function () {
+        location.href =
+          "https://github.com/MattFauth/SECOsandpile/wiki/Como-utilizar";
+      };
+    </script>
 
-	<!-- ################################################################ Canvas -->
-	<div class="canvasDiv" id="canvasHolder">
-	</div>
+    <!-- ################################################################ JS Imports -->
+    <script src="assets/js/Utils/jquery.min.js"></script>
+    <script src="assets/js/Utils/three.min.js"></script>
+    <script src="assets/js/Utils/OrthographicTrackballControls.js"></script>
+    <script src="assets/js/Utils/bootstrap.min.js"></script>
+    <script src="assets/js/Utils/earcut.js"></script>
+    <script src="assets/js/Utils/Geometry.js"></script>
+    <script src="assets/js/Utils/Matrix.js"></script>
+    <script src="assets/js/Utils/Combinatorics.js"></script>
+    <!-- <script src="assets/js/Utils/gpu-browser.min.js"></script> -->
 
-	<!-- ################################################################ JS Imports -->
-	<script src="assets/js/Utils/jquery.min.js"></script>
-	<script src="assets/js/Utils/three.min.js"></script>
-	<script src="assets/js/Utils/OrthographicTrackballControls.js"></script>
-	<script src="assets/js/Utils/bootstrap.min.js"></script>
-	<script src="assets/js/Utils/earcut.js"></script>
-	<script src="assets/js/Utils/Geometry.js"></script>
-	<script src="assets/js/Utils/Matrix.js"></script>
-	<script src="assets/js/Utils/Combinatorics.js"></script>
-	<!-- <script src="assets/js/Utils/gpu-browser.min.js"></script> -->
+    <script src="assets/js/Tiling.js"></script>
 
-	<script src="assets/js/Tiling.js"></script>
+    <script src="assets/js/TilingPresets/HexTiling.js"></script>
+    <script src="assets/js/TilingPresets/TriTiling.js"></script>
+    <script src="assets/js/TilingPresets/PenroseTiling.js"></script>
+    <script src="assets/js/TilingPresets/CustomSquareTiling.js"></script>
+    <script src="assets/js/TilingPresets/SquareTiling.js"></script>
+    <script src="assets/js/TilingPresets/Pythagorean.js"></script>
+    <script src="assets/js/TilingPresets/TruncSquare.js"></script>
+    <script src="assets/js/TilingPresets/CairoPentagonal.js"></script>
+    <script src="assets/js/TilingPresets/PenroseP0.js"></script>
 
-	<script src="assets/js/TilingPresets/HexTiling.js"></script>
-	<script src="assets/js/TilingPresets/TriTiling.js"></script>
-	<script src="assets/js/TilingPresets/PenroseTiling.js"></script>
-	<script src="assets/js/TilingPresets/CustomSquareTiling.js"></script>
-	<script src="assets/js/TilingPresets/SquareTiling.js"></script>
-	<script src="assets/js/TilingPresets/Pythagorean.js"></script>
-	<script src="assets/js/TilingPresets/TruncSquare.js"></script>
-	<script src="assets/js/TilingPresets/CairoPentagonal.js"></script>
-	<script src="assets/js/TilingPresets/PenroseP0.js"></script>
+    <script src="assets/js/TilingPresets/SubstitutionAPI.js"></script>
+    <script src="assets/js/TilingPresets/PenroseP2Substitution.js"></script>
+    <script src="assets/js/TilingPresets/PenroseP3Substitution.js"></script>
+    <script src="assets/js/TilingPresets/AmmannBeenkerA5Substitution.js"></script>
+    <script src="assets/js/TilingPresets/BirdsBeesSubstitution.js"></script>
+    <script src="assets/js/TilingPresets/TriangleSubstitution.js"></script>
 
-	<script src="assets/js/TilingPresets/SubstitutionAPI.js"></script>
-	<script src="assets/js/TilingPresets/PenroseP2Substitution.js"></script>
-	<script src="assets/js/TilingPresets/PenroseP3Substitution.js"></script>
-	<script src="assets/js/TilingPresets/AmmannBeenkerA5Substitution.js"></script>
-	<script src="assets/js/TilingPresets/BirdsBeesSubstitution.js"></script>
-	<script src="assets/js/TilingPresets/TriangleSubstitution.js"></script>
+    <script src="assets/js/TilingPresets/CutAndProjectViaMultigrid.js"></script>
 
-	<script src="assets/js/TilingPresets/CutAndProjectViaMultigrid.js"></script>
+    <script src="assets/js/Features/ChangeDisplay.js"></script>
+    <script src="assets/js/Features/ImportExport.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="assets/js/Features/Stats.js"></script>
+    <script src="assets/js/Features/Harmonics.js"></script>
+    <script src="assets/js/Features/Roundness.js"></script>
+    <script src="assets/js/Features/Batch_processings.js"></script>
 
-	<script src="assets/js/Features/ChangeDisplay.js"></script>
-	<script src="assets/js/Features/ImportExport.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-	<script src="assets/js/Features/Stats.js"></script>
-	<script src="assets/js/Features/Harmonics.js"></script>
-	<script src="assets/js/Features/Roundness.js"></script>
-	<script src="assets/js/Features/Batch_processings.js"></script>
-
-	<script src="assets/js/app.js"></script>
-
-</body> <!-- ############################################################ End. -->
-
+    <script src="assets/js/app.js"></script>
+  </body>
+  <!-- ############################################################ End. -->
 </html>

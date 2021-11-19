@@ -717,3 +717,14 @@ var holdMouse = false;
 var lastTile = 0;
 var previousTile = -1;
 
+function optionsFractal() {
+	var check = document.getElementById("btncheck1");
+	var dropdown = document.getElementById("TilingSelect");
+  if (check.checked) {
+	  dropdown.style.display = "block";
+	  dropdown.style.alignSelf = "center";
+	  dropdown.style.margin = "10px";
+  } else {
+	  dropdown.style.display = "none";
+  }
+}

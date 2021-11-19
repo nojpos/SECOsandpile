@@ -111,8 +111,12 @@
     <nav>
       <!-- ############################################################ Main Controls -->
       <div id="main controls" class="controlGroup">
+        <div class="btn-group" role="group" aria-label="Checkbox Fractais">
+          <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="optionsFractal()">
+          <label class="btn btn-outrline-primary" for="btncheck1">Opções para Fractais</label>
+        </div>
         <p class="groupTitle">Seleção de matriz</p>
-        <select id="TilingSelect" onchange="hideParams()">
+        <select id="TilingSelect" onchange="hideParams()" style="display: none;">
           <optgroup label="Regular">
             <option value="sqTiling">Square Tiling</option>
             <option value="hexTiling">Hexagonal Tiling</option>

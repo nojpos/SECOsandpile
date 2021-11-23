@@ -57,7 +57,7 @@ var modal = document.getElementById('colors');
 // Button that opens the modal
 var btn = document.getElementById("colorButton");
 
-var current_preset = "default";
+var current_preset = "padrao";
 
 // When the user clicks on the button, open the modal 
 btn.onclick = function() {
@@ -104,13 +104,13 @@ btn.onclick = function() {
 	var colorTotal = cmap.length;
 	
 	var addColor = document.createElement("button");
-	addColor.innerHTML = "Add color";
+	addColor.innerHTML = "Adicionar Cor";
 	addColor.classList.add("btn");
 	addColor.classList.add("btn-default");
 	addColor.style = "bottom:20px;right:100px;position:absolute;";
 	addColor.onclick = function() {
 		var para = document.createElement("p");
-		var node = document.createTextNode("Color " + colorTotal);
+		var node = document.createTextNode("Cor: " + colorTotal);
 		colorTotal ++;
 		
 		var colElement = document.createElement("input");
@@ -130,7 +130,7 @@ btn.onclick = function() {
 	var validate = document.createElement("button");
 	validate.classList.add("btn");
 	validate.classList.add("btn-default");
-	validate.innerHTML = "Save";
+	validate.innerHTML = "Salvar";
 	validate.style = "bottom:20px; right:20px;position:absolute;";
 	validate.onclick = function() {
 		current_preset = preset_choice.value;
@@ -157,7 +157,7 @@ btn.onclick = function() {
 	// ------------------------------------------------
 	
 	var preset_span = document.createElement("span");
-	preset_span.innerHTML = "Preset : ";
+	preset_span.innerHTML = "Preset: ";
 	var preset_choice = document.createElement("select");
 	preset_span.style = "top:60px; right:20px;position:absolute;";
 	preset_choice.style = "display:inline";
@@ -182,19 +182,19 @@ btn.onclick = function() {
 				default_para = null;
 			}
 		}
-		var black4_array = ["#ffffff", "#cccccc", "#666666", "#000000", "#ff1a1a", "#ff751a", "#ffbb33", "#ffff4d", "#99ff66", "#44ff11", "#22ffaa", "#00ffff", "#0077ff",  "#0000ff"];
-		var black3_array = ["#ffffff", "#aaaaaa", "#000000", "#ff1a1a", "#ff9933", "#ffff4d", "#99ff66", "#44ff11", "#22ffaa", "#00ffff", "#0077ff",  "#0000ff"];
-		var grey_array = ["#ffffff", "#dddddd", "#bbbbbb", "#999999", "#777777", "#555555", "#eeee00"];
-		var lava_array = ["#cccccc", "#888888", "#444444", "#553333", "#772222", "#aa1111", "#ff1100", "#ff8800", "#eeee00"];
-		var blue_array = ["#000055", "#000088", "#0022aa", "#0044ff", "#0099ff", "#00ccff", "#00ffff", "#aaffff", "#ffffff"];
-		var green_array = ["#ffffff", "#ffffcc", "#ddffaa", "#aaff77", "#66ff33", "#33cc33", "#009933"];
+		var default_array = ["#ffffff", "#99aed4", "#345da9", "#192f56", "#010103"];
+		var black3_array = ["#ffffff", "#7B68EE", "#9370DB", "#8A2BE2", "#4B0082"];
+		var grey_array = ["#ffffff", "#dddddd", "#bbbbbb", "#999999", "#777777"];
+		var lava_array = ["#cccccc", "#888888", "#444444", "#553333", "#772222"];
+		var blue_array = ["#ffffff", "#0099ff", "#0044ff", "#0022aa", "#000088"];
+		var green_array = ["#ffffff", "#ffffcc", "#ddffaa", "#aaff77", "#66ff33"];
 		var exemplo_array = ["#ffffff", "#FEE9A7", "#FCDB72", "#FFB86C", "#F68552"];
 		
 		var selected_array;
 		
 		switch(preset_choice.value){
-			case "black4":
-			selected_array = black4_array;
+			case "padrao":
+			selected_array = default_array;
 			break;
 
 			case "black3":
@@ -246,44 +246,44 @@ btn.onclick = function() {
 	
 	// Create element for each preset we defined
 	
-	var p0 = document.createElement("option");
-	p0.value = "default";
-	p0.innerHTML = "Default";
-	preset_choice.appendChild(p0);
+	// var p0 = document.createElement("option");
+	// p0.value = "default";
+	// p0.innerHTML = "Default";
+	// preset_choice.appendChild(p0);
 	
 	var p1 = document.createElement("option");
-	p1.value = "black4";
-	p1.innerHTML = "Greyscale 4";
+	p1.value = "padrao";
+	p1.innerHTML = "Padrão";
 	preset_choice.appendChild(p1);
 	
 	var p2 = document.createElement("option");
 	p2.value = "black3";
-	p2.innerHTML = "Greyscale 3";
+	p2.innerHTML = "Escala Roxa";
 	preset_choice.appendChild(p2);
 	
 	var p3 = document.createElement("option");
 	p3.value = "grey";
-	p3.innerHTML = "Gold Dust";
+	p3.innerHTML = "Escala Cinza";
 	preset_choice.appendChild(p3);
 	
 	var p4 = document.createElement("option");
 	p4.value = "lava";
-	p4.innerHTML = "Lava red";
+	p4.innerHTML = "Escala Vermelha";
 	preset_choice.appendChild(p4);
 	
 	var p5 = document.createElement("option");
 	p5.value = "blue";
-	p5.innerHTML = "Deep blue";
+	p5.innerHTML = "Escala Azul";
 	preset_choice.appendChild(p5);
 	
 	var p6 = document.createElement("option");
 	p6.value = "green";
-	p6.innerHTML = "Lime green";
+	p6.innerHTML = "Escala Verde";
 	preset_choice.appendChild(p6);
 
 	var p7 = document.createElement("option");
 	p7.value = "exemplo";
-	p7.innerHTML = "Lime exemplo";
+	p7.innerHTML = "Exemplo Apresentação";
 	preset_choice.appendChild(p7);
 	
 	

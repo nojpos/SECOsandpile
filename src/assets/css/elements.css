@@ -17,7 +17,7 @@ body{
 }
 
 nav{
-	width: 270px;
+	width: 450px;
 	position: fixed;
 	top: 70px;
 	bottom: 10px;
@@ -52,7 +52,7 @@ nav{
 .canvasDiv{
 	position: fixed;
 	top : 70px;
-	left : 280px;
+	left : 460px;
 	bottom:0;
 	right:0;
 }
@@ -117,11 +117,11 @@ input{
 }
 
 input:checked + .slider {
-  background-color: #FCBE40;
+  background-color: #0075ff;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #FCBE40;
+  box-shadow: 0 0 1px #0075ff;
 }
 
 input:checked + .slider:before {

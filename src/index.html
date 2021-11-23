@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>SECOsandpile</title>
+	<title>SAPIENS</title>
 	<link rel="icon" href="favicon.ico" />
 	<base href="/">
 	<!-- ####################################################### CSS IMPORTS -->
@@ -19,29 +19,33 @@
 	<app-root></app-root>
 	<!-- ################################################################ UPPER BAR -->
 	<header>
-		<span style="margin-left:10px; margin-right:80px; font-size:35px; font-weight:bold;">SECOsandpile</span>
-		Zoom (%):
-		<input type="number" id="zoomLevel" style="margin-right:20px" oninput="set_zoom(this)" value="100" max="9999"
-			step="10" />
-		Tempo entre passos (ms):
-		<input type="number" id="delay" style="margin-right:20px" value="100" oninput="changeDelay(this);" min="0"
-			max="10000" />
-		Taxa de atualização:
-		<input type="number" id="IPF" style="margin-right:80px" value="1" oninput="changeIPS(this);" min="1"
-			max="999" />
-		<button id="playButton" onclick="playPause(this)" class="btn btn-default"
-			style="margin-right:20px; font-weight:bold;">Iniciar</button>
-		<button onclick="step()" style="margin-right:20px" class="btn btn-default">Passo</button>
-		<span id="number_of_steps"></span>
-		<button onclick="reset_number_of_steps()" style="margin-right:20px" class="btn btn-default">Reiniciar
-			contador</button>
+		<span style="margin-left:10px; margin-right:80px; font-size:35px; font-weight:bold;">SAPIENS</span>
+		<div style="position:absolute; top:14px; margin-left:24%;">
+			Zoom (%):
+			<input type="number" id="zoomLevel" style="margin-right:20px" oninput="set_zoom(this)" value="100" max="9999"
+				step="10" />
+			Tempo entre passos (ms):
+			<input type="number" id="delay" style="margin-right:20px" value="100" oninput="changeDelay(this);" min="0"
+				max="10000" />
+			<!-- Taxa de atualização: -->
+			<input type="number" id="IPF" style="margin-right:80px" value="1" oninput="changeIPS(this);" min="1"
+				max="999" hidden/>
+			<button id="playButton" onclick="playPause(this)" class="btn btn-default"
+				style="margin-right:20px; font-weight:bold;">Iniciar</button>
+			<!-- <button onclick="step()" style="margin-right:20px" class="btn btn-default">Passo</button> -->
+			<span>Número de passos: </span>
+			<span id="number_of_steps"></span>
+		</div>
+		
+		<!-- <button onclick="reset_number_of_steps()" style="margin-right:20px" class="btn btn-default">Reiniciar
+			contador</button> -->
 
 		<!-- <button id="stabilizeButton"  onclick="stabTiling()" class="btn btn-primary">Stabilize</button> -->
 
 		<!-- Upper right alignment -->
 		<span style="position:absolute; top:10px; right:50px"> Pausa automática: </span>
 		<label class="switch" style="position:absolute; top:12px; right:10px">
-			<input type="checkbox" id="pauseToggle" checked="true">
+			<input type="checkbox" id="pauseToggle">
 			<span class="slider round"></span>
 		</label>
 
@@ -60,7 +64,7 @@
 		<!-- ############################################################ Main Controls -->
 		<div id="main controls" class="controlGroup">
 			<p class="groupTitle">Seleção de matriz</p>
-			<select id="TilingSelect" onchange="hideParams()">
+			<!-- <select id="TilingSelect" onchange="hideParams()">
 				<optgroup label="Regular">
 					<option value="sqTiling">Square Tiling</option>
 					<option value="hexTiling">Hexagonal Tiling</option>
@@ -110,13 +114,12 @@
 					<option value="cairoPenta">Cairo Pentagonal</option>
 				</optgroup>
 
-			</select>
+			</select> -->
 
 			<!--<form id="postCustom" enctype="multipart/form-data" action="/upload/image" method="post">
 					<input type="file" id="inputCustom" accept=".png,.jpg,.jpeg,.bmp" style="display:none;" />
 				</form>-->
-			<button onclick='drawTiling()' style="margin-left:25px; font-weight:bold;" class="btn btn-default">Criar Matriz</button>
-			<br>
+			<button onclick='drawTiling()' style="margin-left:auto; margin-right:auto; margin-bottom: 5px; display:table; font-weight:bold;" class="btn btn-default">Criar Matriz</button>
 
 
 			<!-- Tiling-specific controls -->
@@ -158,7 +161,7 @@
 			</select>
 			<div id="maskMouseRepeat" style="display:inline;">
 				&nbsp;&nbsp;vezes&nbsp;&nbsp;
-				<input type="number" id="mouseOperationRepeat" value="1" min="0" max="999999" style="width: 70px;" />
+				<input type="number" id="mouseOperationRepeat" value="1" min="1" max="4" style="width: 70px;" />
 			</div>
 			<br><br>
 			<div style="display:flex;">
@@ -179,7 +182,7 @@
 		</div> <!-- Mouse controls -->
 
 		<!-- ############################################################ Operations / Secondary Controls -->
-		<div id="secondary controls" class="controlGroup">
+		<!-- <div id="secondary controls" class="controlGroup">
 			<p class="groupTitle">Operações da pilha de areia</p>
 			<select id="complexOperationValue">
 				<option value="MaxS">Estável máx.</option>
@@ -205,24 +208,37 @@
 			<button onclick="clearTiling()" class="btn btn-default"
 				style="margin-top:10px;display: table;width: -webkit-fill-available;">Limpar</button>
 			<button id="saveConfig" onclick="saveConfiguration()"
-				style="margin-top:10px;display: table;width: -webkit-fill-available;;" class="btn btn-default">Salvar Configurações</button>
+				style="margin-top:10px;display: table;width: -webkit-fill-available;;" class="btn btn-default">Salvar Configurações</button> -->
 
 			<!-- Random Seeding -->
-			<div id="seedMask" style="margin-top:10px;">
+			<!-- <div id="seedMask" style="margin-top:10px;">
 				Semente aleatória:
 				<input id="randSeed" value="1" oninput="changeSeed(this);" style="width: 60px;" />
 			</div>
-		</div> <!-- Operations controls -->
+		</div>  -->
+		<!-- Operations controls -->
 
 		<!-- ############################################################ Stabilization -->
 		<div class="controlGroup">
 			<p class="groupTitle">Processos da pilha de areia</p>
-			<button onclick="steps()" class="btn btn-default">Passo</button>
-			&nbsp;&nbsp;vezes&nbsp;&nbsp;
-			<input type="number" id="stepsRepeat" value="1" min="1" max="999999" style="width: 70px;" />
+			<button onclick="step()" class="btn btn-default"
+			style="margin-top:10px;display: table;width: -webkit-fill-available;">Passo</button>
+			<!-- &nbsp;&nbsp;vezes&nbsp;&nbsp;
+			<input type="number" id="stepsRepeat" value="1" min="1" max="999999" style="width: 70px;" /> -->
+			<br>
+			<span style="position:block; top:10px; right:50px"> Adionar grão aleatório automático: </span>
+			<label class="switch" style="position:block;top: 2px;right: 0px;">
+				<input type="checkbox" id="addRadomToggle">
+				<span class="slider round"></span>
+			</label>
 			<br>
 			<div style="margin-left:auto; margin-right:auto; margin-top:10px; display:grid">
-				<button onclick="stabTiling()" class="btn btn-default">Estabilizar</button>
+				<button onclick="addRadomSand()" class="btn btn-default"
+				style="display: table;width: -webkit-fill-available;">Adicionar grão aleatório</button>
+				<button onclick="clearTiling()" class="btn btn-default"
+				style="margin-top:10px;display: table;width: -webkit-fill-available;">Limpar</button>
+				<button onclick="stabTiling()" class="btn btn-default"
+				style="margin-top:10px;display: table;width: -webkit-fill-available;">Estabilizar</button>
 			</div>
 		</div>
 
@@ -259,7 +275,7 @@
 		</div>
 
 		<!-- ############################################################ Informations -->
-		<div class="controlGroup" style="height:400px; position:relative;">
+		<div class="controlGroup" style="height: auto; position:relative;">
 			<p class="groupTitle">Informações</p>
 
 			<!-- <span id="tileInfo">Selected tile info</span>

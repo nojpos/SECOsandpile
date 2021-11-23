@@ -78,8 +78,8 @@ const myChartAvalanches = new Chart(document.getElementById('myChartAvalanches')
 		datasets: [{
 			fill: false,
 			lineTension: 0,
-			backgroundColor: "rgba(0,0,255,1.0)",
-			borderColor: "rgba(0,0,255,0.1)",
+			backgroundColor: "#192f56",
+			borderColor: "#345da9",
 			data: listaQtdAvalanches
 		}]
 	},
@@ -101,8 +101,8 @@ const myChartGraosPerdidos = new Chart(document.getElementById('myChartGraosPerd
 		datasets: [{
 			fill: false,
 			lineTension: 0,
-			backgroundColor: "red",
-			borderColor: "rgba(0,0,255,0.1)",
+			backgroundColor: "#CD1818",
+			borderColor: "#ff4c57",
 			data: listaQtdGraosPerdidos
 		}]
 	},
@@ -135,11 +135,11 @@ function show_stats() {
 		listaQtdGraosPerdidos.push(currentTiling.qtdGraosPerdidos);
 		listaNumberOfSteps.push(number_of_steps);
 
-		if (listaNumberOfSteps.length > 5) {
-			listaQtdAvalanches.shift();
-			listaQtdGraosPerdidos.shift();
-			listaNumberOfSteps.shift();
-		};
+		// if (listaNumberOfSteps.length > 5) {
+		// 	listaQtdAvalanches.shift();
+		// 	listaQtdGraosPerdidos.shift();
+		// 	listaNumberOfSteps.shift();
+		// };
 
 		myChartAvalanches.update();
 		myChartGraosPerdidos.update();
@@ -151,7 +151,7 @@ function show_stats() {
 		}
 
 
-		var text_stats = "Number of tiles : " + currentTiling.tiles.length + "<br>qtdAvalanches : " + qtdAvalanches + "<br>qtdGraosPerdidos : " + qtdGraosPerdidos;
+		var text_stats = "Número de sítios: " + currentTiling.tiles.length;
 		// var text_stats = "Number of tiles : " + currentTiling.tiles.length + "<br>qtdAvalanches : " + qtdAvalanches + "<br>qtdGraosPerdidos : " + qtdGraosPerdidos + "<br>Mean : " + mean + "<br> Standard deviation : " + std + "<br> Population : <br>";
 		var jump_line = false;
 		Object.keys(population).forEach(function (key) {
